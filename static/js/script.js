@@ -4,12 +4,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         var selectedMark = document.querySelector('input[name="player1"]:checked').value;
 
-        fetch('/main', {
+        fetch('/main.py', {  // Changed route to '/main.py'
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
             },
-            body: JSON.stringify({ mark: selectedMark }),
+            body: JSON.stringify({ mark: selectedMark , board: { row: 1, col: 1, value: 'X' } }),
         })
         .then(response => response.json())
         .then(data => {
@@ -21,13 +21,15 @@ document.addEventListener('DOMContentLoaded', (event) => {
         });
     });
 
+
+
     var cells = document.querySelectorAll('.cell');
 
     for (var i = 0; i < cells.length; i++) {
         cells[i].addEventListener('click', function() {
             var cellId = this.id;
 
-            fetch('/main', {
+            fetch('/main.py', {  // Changed route to '/main.py'
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

@@ -3,7 +3,6 @@ from tictactoe import TicTacToe
 
 app = Flask(__name__)
 game = TicTacToe()
-counter = 0
 
 @app.route('/')
 def home():
@@ -11,7 +10,6 @@ def home():
 
 @app.route('/main.py', methods=['POST'])
 def main():
-    global counter
     def board_map(cell_id):
         if cell_id == "cell-0":
             return (0,0)
@@ -35,19 +33,21 @@ def main():
     # Get JSON data from request
     data = request.get_json()
 
+    # Get board data from request
+    board_data = data.get('board')
+    if board_data:
+        row = board_data.get('row')
+        col = board_data.get('col')
+        value = board_data.get('value')
+        game.board[row][col] = value
+
     # Get cell id and mark from data
     cell_id = data.get('id')
     mark = data.get('mark')
 
-    if mark:
-        if (mark == 'O') and (counter == 0):
-            game.board[1][1] = 'X'
-            counter += 1
-        game.player = mark
-    elif cell_id:
-        row, col = board_map(cell_id)
-        mark = game.player
-        game.mark(row, col)
+    row, col = board_map(cell_id)
+    mark = game.player
+    game.mark(row, col)
 
     return jsonify({'mark': mark})
 
