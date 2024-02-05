@@ -18,7 +18,13 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 body: JSON.stringify({ id: cellId }),
             })
             .then(response => response.json())
-            .then(data => console.log(data))
+            .then(data => {
+                // Get the mark from the response
+                var mark = data.mark;
+            
+                // Do something with the mark
+                this.innerHTML = mark;
+            })
             .catch((error) => {
                 console.error('Error:', error);
             });
