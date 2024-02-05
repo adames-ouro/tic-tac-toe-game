@@ -11,6 +11,11 @@
     width: 100%;
 }
 
+.grid.disabled {
+    pointer-events: none;
+    opacity: 0.4;
+}
+
 .tic-tac-toe {
     margin-top: auto;
     padding-bottom: 50px;

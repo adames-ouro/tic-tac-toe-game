@@ -1,11 +1,10 @@
 document.addEventListener('DOMContentLoaded', (event) => {
-    // Get selected mark from html form
     document.getElementById('settings-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
         var selectedMark = document.querySelector('input[name="player1"]:checked').value;
 
-        fetch('/endpoint', {
+        fetch('/main', {
             method: 'POST',
             headers: {
                 'Content-Type': 'application/json',
@@ -13,24 +12,22 @@ document.addEventListener('DOMContentLoaded', (event) => {
             body: JSON.stringify({ mark: selectedMark }),
         })
         .then(response => response.json())
-        .then(data => console.log(data))
+        .then(data => {
+            console.log(data);
+            document.getElementById('grid').classList.remove('disabled');
+        })
         .catch((error) => {
             console.error('Error:', error);
         });
     });
 
-    // Select all cells
     var cells = document.querySelectorAll('.cell');
 
-    // Loop through each cell
     for (var i = 0; i < cells.length; i++) {
-        // Add click event listener to each cell
         cells[i].addEventListener('click', function() {
-            // Get cell id
             var cellId = this.id;
 
-            // Send cell id to Python script
-            fetch('main.py', {
+            fetch('/main', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
@@ -39,14 +36,8 @@ document.addEventListener('DOMContentLoaded', (event) => {
             })
             .then(response => response.json())
             .then(data => {
-                
-                // Get the mark from the response
                 var mark = data.mark;
-
-                // Do something with the mark
                 this.innerHTML = mark;
-
-                // Add class to cell based on mark
                 if (mark === 'X') {
                     this.classList.add('x-mark');
                 } else if (mark === 'O') {

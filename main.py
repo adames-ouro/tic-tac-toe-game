@@ -8,17 +8,9 @@ game = TicTacToe()
 def home():
     return render_template('index.html')
 
-@app.route('/endpoint', methods=['POST'])
-def handle_mark():
-    data = request.get_json()
-    mark = data['mark']
-    # Do something with mark
-    mark = game.player
-    return jsonify({'message': 'Received'}), 200
-
 @app.route('/main.py', methods=['POST'])
 def main():
-
+    counter = 0
     def board_map(cell_id):
         if cell_id == "cell-0":
             return (0,0)
@@ -43,14 +35,18 @@ def main():
     data = request.get_json()
 
     # Get cell id from data
-    cell_id = data['id']
+    cell_id = data.get('id')
+    mark = data.get('mark')
 
-    # show cell id 
-    row,col = board_map(cell_id)
-
-    # mark the cell
-    mark = game.player
-    game.mark(row,col) 
+    if mark:
+        if (mark == 'O') and (counter == 0):
+            game.board[1][1] = 'X'
+            counter += 1
+        game.player = mark
+    elif cell_id:
+        row, col = board_map(cell_id)
+        mark = game.player
+        game.mark(row, col)
 
     return jsonify({'mark': mark})
 
