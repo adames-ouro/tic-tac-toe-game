@@ -19,6 +19,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             })
             .then(response => response.json())
             .then(data => {
+                
                 // Get the mark from the response
                 var mark = data.mark;
 
