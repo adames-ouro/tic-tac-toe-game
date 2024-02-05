@@ -1,3 +1,6 @@
+from flask import Flask, request, jsonify, render_template
+
+
 class TicTacToe(object):
     '''Management of a Tic-Tac-Toe game (does not do strategy)'''
 
@@ -57,7 +60,31 @@ class TicTacToe(object):
         return self.board
     
 
-game = TicTacToe()
+app = Flask(__name__)
+
+@app.route('/')
+def home():
+    return render_template('index.html')
+
+
+@app.route('/main.py', methods=['POST'])
+def main():
+    # Get JSON data from request
+    data = request.get_json()
+
+    # Get cell id from data
+    cell_id = data['id']
+
+    # Do something with cell id
+    print(f'Received cell id: {cell_id}')
+
+    # Return a response
+    return jsonify({'message': 'Success'})
+
+if __name__ == '__main__':
+    app.run(port=5000)
+
+#game = TicTacToe()
 
 # X moves
 #game.mark(0,0)
