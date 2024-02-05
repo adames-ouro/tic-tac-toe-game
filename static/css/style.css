@@ -44,3 +44,8 @@
 .o-mark {
     color: blue;
 }
+
+#settings-form div {
+    display: inline-block;
+    margin-right: 10px;
+}

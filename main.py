@@ -8,6 +8,14 @@ game = TicTacToe()
 def home():
     return render_template('index.html')
 
+@app.route('/endpoint', methods=['POST'])
+def handle_mark():
+    data = request.get_json()
+    mark = data['mark']
+    # Do something with mark
+    mark = game.player
+    return jsonify({'message': 'Received'}), 200
+
 @app.route('/main.py', methods=['POST'])
 def main():
 

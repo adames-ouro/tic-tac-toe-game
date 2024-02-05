@@ -1,4 +1,24 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+    // Get selected mark from html form
+    document.getElementById('settings-form').addEventListener('submit', function(event) {
+        event.preventDefault();
+
+        var selectedMark = document.querySelector('input[name="player1"]:checked').value;
+
+        fetch('/endpoint', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+            },
+            body: JSON.stringify({ mark: selectedMark }),
+        })
+        .then(response => response.json())
+        .then(data => console.log(data))
+        .catch((error) => {
+            console.error('Error:', error);
+        });
+    });
+
     // Select all cells
     var cells = document.querySelectorAll('.cell');
 
