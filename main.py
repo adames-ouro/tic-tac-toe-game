@@ -28,7 +28,6 @@ def board_map(cell_id):
     elif cell_id == "cell-8":
         return (2,2)
 
-
 @app.route('/main.py', methods=['POST'])
 def main():
 
