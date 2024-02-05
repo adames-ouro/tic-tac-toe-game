@@ -10,6 +10,7 @@ def home():
 
 @app.route('/main.py', methods=['POST'])
 def main():
+    
     def board_map(cell_id):
         if cell_id == "cell-0":
             return (0,0)
@@ -29,6 +30,7 @@ def main():
             return (2,1)
         elif cell_id == "cell-8":
             return (2,2)
+        
     # Get JSON data from request
     data = request.get_json()
 
