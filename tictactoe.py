@@ -11,10 +11,6 @@ class TicTacToe(object):
         Put an X or O mark on the board at position (row,col) 
         for next player's turn.
         '''
-        # out of bounds error
-        if not (0 <= row <= 2 and 0 <= col <= 2):
-            raise ValueError('Invalid board position')
-        
         # if the position is already taken
         if self.board[row][col] != ' ':
             raise ValueError('Board position occupied')
@@ -50,9 +46,3 @@ class TicTacToe(object):
             if self._is_win(mark):
                 return mark
         return None
-    
-    def __str__(self):
-        '''Return the string representation of the current game'''
-        #rows = ['|'.join(self.board[r]) for r in range(3)]
-        return self.board
-    
