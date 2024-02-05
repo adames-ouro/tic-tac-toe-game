@@ -10,7 +10,7 @@ def home():
 
 @app.route('/main.py', methods=['POST'])
 def main():
-    
+
     def board_map(cell_id):
         if cell_id == "cell-0":
             return (0,0)
@@ -42,7 +42,7 @@ def main():
 
     # mark the cell
     mark = game.player
-    game.mark(row,col)
+    game.mark(row,col) 
 
     return jsonify({'mark': mark})
 
