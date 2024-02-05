@@ -21,9 +21,16 @@ document.addEventListener('DOMContentLoaded', (event) => {
             .then(data => {
                 // Get the mark from the response
                 var mark = data.mark;
-            
+
                 // Do something with the mark
                 this.innerHTML = mark;
+
+                // Add class to cell based on mark
+                if (mark === 'X') {
+                    this.classList.add('x-mark');
+                } else if (mark === 'O') {
+                    this.classList.add('o-mark');
+                }
             })
             .catch((error) => {
                 console.error('Error:', error);
