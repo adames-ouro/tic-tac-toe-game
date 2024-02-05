@@ -13,7 +13,7 @@
 
 .tic-tac-toe {
     margin-top: auto;
-    padding-bottom: 100px;
+    padding-bottom: 50px;
     display: flex;
     flex-direction: column;
     align-items: center;
