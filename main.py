@@ -52,7 +52,7 @@ def reset_game():
     return jsonify({'status': 'Game reset'})
 
 @app.route('/usrmove', methods=['POST'])
-def main():
+def player_move():
     # Get JSON data from request
     data = request.get_json()
 
@@ -64,6 +64,7 @@ def main():
     game.mark(row, col)
 
     # implement stratergy using the board
+    # board()
     return jsonify({'mark': mark})
 
 if __name__ == '__main__':
