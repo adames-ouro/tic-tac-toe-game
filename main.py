@@ -23,7 +23,11 @@ def board_map(cell_id):
         return (2,1)
     elif cell_id == "cell-8":
         return (2,2)
-        
+
+def current_board(game):
+    a=1
+
+
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -68,4 +72,4 @@ def player_move():
     return jsonify({'mark': mark})
 
 if __name__ == '__main__':
-    app.run(port=5000)
+    app.run(port=8000)
