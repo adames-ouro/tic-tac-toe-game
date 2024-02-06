@@ -71,8 +71,8 @@ def reset_game():
     game.reset()
     return jsonify({'status': 'Game reset'})
 
-@app.route('/usrmove', methods=['POST'])
-def player_move():
+@app.route('/pcmove', methods=['GET'])
+def automatic_move():
     def pc_move():
         # get filled cell positions
         rows, cols = set(), set()
@@ -103,6 +103,27 @@ def player_move():
                     max_pos = (i, j)
 
         return max_pos
+    
+    # implement stratergy using the board
+    pc_mark = pc_move()
+    html_id = grid_map(pc_mark)
+
+    if game.player == 'X':
+        game.player = 'O'
+        style = 'x-mark'
+        
+    elif game.player == 'O':
+        game.player = 'X'
+        style = 'o-mark'
+        
+
+    game.mark(pc_mark[0], pc_mark[1])
+    
+    return jsonify({'mark': game.player, 'html_id': html_id,'style':style})
+
+
+@app.route('/usrmove', methods=['POST'])
+def player_move():
     # Get JSON data from request
     data = request.get_json()
 
@@ -112,13 +133,7 @@ def player_move():
     row, col = board_map(cell_id)
     mark = game.player
     game.mark(row, col)
-
-    # implement stratergy using the board
-    pc_mark = pc_move()
-    html_id = grid_map(pc_mark)
-    print(html_id)
-    game.mark(pc_mark[0], pc_mark[1])
-    return jsonify({'mark': mark, 'cell_id': html_id})
+    return jsonify({'mark': mark})
 
 if __name__ == '__main__':
     app.run(port=8000)
