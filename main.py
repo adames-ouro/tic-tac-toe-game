@@ -72,7 +72,7 @@ def reset_game():
     return jsonify({'status': 'Game reset'})
 
 @app.route('/pcmove', methods=['GET'])
-def automatic_move(mark):
+def automatic_move():
     def pc_move():
         # get filled cell positions
         rows, cols = set(), set()
@@ -102,22 +102,26 @@ def automatic_move(mark):
                     max_value = value
                     max_pos = (i, j)
 
+        if game.player == 'X':
+            game.player = 'O'
+        else:
+            game.player = 'X'
+
         return max_pos
     
     # implement stratergy using the board
     pc_mark = pc_move()
     html_id = grid_map(pc_mark)
 
-    if mark == 'X':
+    if game.player == 'X':
         style = 'x-mark'
         
-    elif mark == 'O':
+    elif game.player  == 'O':
         style = 'o-mark'
-        
 
     game.mark(pc_mark[0], pc_mark[1])
     
-    return jsonify({'mark': mark, 'html_id': html_id,'style':style})
+    return jsonify({'mark': game.player, 'html_id': html_id,'style':style})
 
 
 @app.route('/usrmove', methods=['POST'])
@@ -131,7 +135,6 @@ def player_move():
     row, col = board_map(cell_id)
     mark = game.player
     game.mark(row, col)
-    automatic_move(mark)
     return jsonify({'mark': mark})
 
 if __name__ == '__main__':

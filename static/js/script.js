@@ -96,35 +96,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
         });
     }
-
-    document.querySelectorAll('.cell').forEach(cell => {
-        cell.addEventListener('click', function() {
-            if(this.innerHTML !== '') return; // Prevent marking an already marked cell
-            
-            // Fetch request to get the next move from the server
-            fetch('/pcmove', {
-                method: 'GET',  // Changed to GET if no data is sent to the server
-                headers: {
-                    'Content-Type': 'application/json'
-                }
-            })
-            .then(response => {
-                if (!response.ok) {
-                    throw new Error('Network response was not ok');
-                }
-                return response.json();
-            })
-            .then(data => {
-                // Use the 'data' from the server to update the UI
-                let cell = document.getElementById(data.html_id);
-                if(cell.innerHTML === '') {
-                    cell.innerHTML = data.mark;
-                    cell.classList.add(data.style);
-                }
-            })
-            .catch((error) => {
-                console.error('Error:', error);
-            });
-        });
-    });
 });
