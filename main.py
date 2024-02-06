@@ -62,7 +62,7 @@ def main():
     row, col = board_map(cell_id)
     mark = game.player
     game.mark(row, col)
-
+    # implement stratergy using the board
     return jsonify({'mark': mark})
 
 if __name__ == '__main__':

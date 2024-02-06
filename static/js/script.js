@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+
     // Get the submit and reset button elements
     var submitButton = document.querySelector('#settings-form input[type="submit"]');
     var resetButton = document.getElementById('reset-button');
@@ -11,6 +12,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Add a click event listener to the submit button
     submitButton.addEventListener('click', function(event) {
+
         // Prevent the form from being submitted in the traditional way
         event.preventDefault();
 
@@ -42,6 +44,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
             // Disable the submit button
             submitButton.disabled = true;            
         }
+
     });
 
     // Add a click event listener to the reset button
@@ -64,9 +67,9 @@ document.addEventListener('DOMContentLoaded', (event) => {
             location.reload();
         });
     });
+
     // Add a click event listener to each cell
     var cells = document.querySelectorAll('.cell');
-
     for (var i = 0; i < cells.length; i++) {
         cells[i].addEventListener('click', function() {
             var cellId = this.id;
