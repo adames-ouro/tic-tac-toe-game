@@ -3,8 +3,13 @@ class TicTacToe(object):
 
     def __init__(self):
         '''Start a new game'''
-        self.board =[ [' ']*3 for _ in range(3)] # 3x3 matrix
-        self.player = 'X' # Player parameter, X by default
+        self.board =[ ['']*3 for _ in range(3)] # 3x3 matrix
+        self.player = '' # Player parameter, X by default
+
+    def reset(self):
+        '''Reset the game to the initial state'''
+        self.board = [['']*3 for _ in range(3)]
+        self.player = ''
 
     def mark(self, row, col):
         '''
@@ -12,7 +17,7 @@ class TicTacToe(object):
         for next player's turn.
         '''
         # if the position is already taken
-        if self.board[row][col] != ' ':
+        if self.board[row][col] != '':
             raise ValueError('Board position occupied')
         
         # if the game is already over
