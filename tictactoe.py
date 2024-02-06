@@ -4,7 +4,7 @@ class TicTacToe(object):
     def __init__(self):
         '''Start a new game'''
         self.board =[ ['']*3 for _ in range(3)] # 3x3 matrix
-        self.player = '' # Player parameter, X by default
+        self.player = '' # Player parameter
 
     def reset(self):
         '''Reset the game to the initial state'''
