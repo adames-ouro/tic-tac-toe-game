@@ -27,12 +27,32 @@ document.addEventListener('DOMContentLoaded', (event) => {
                 var randomIndex = Math.floor(Math.random() * elements.length); // Generate a random index
                 var chosenElement = elements[randomIndex]; // Use the random index to pick an element
                 var cell = document.getElementById(chosenElement); // mark that conrner
-        
-                // Add 'X' to the cell element
-                cell.textContent = 'X';
-        
-                // Apply the .x-mark CSS class to the cell-4 element
-                cell.classList.add('x-mark');
+
+                // Get the submit and reset button elements
+                var submitButton = document.querySelector('#settings-form input[type="submit"]');
+                var resetButton = document.getElementById('reset-button');
+
+                // Add a click event listener to the submit button
+                submitButton.addEventListener('click', function(event) {
+                    // Prevent the form from being submitted in the traditional way
+                    event.preventDefault();
+
+                    // Add 'X' to the cell element
+                    cell.textContent = 'X';
+            
+                    // Apply the .x-mark CSS class to the cell-4 element
+                    cell.classList.add('x-mark');
+
+                    // Disable the submit button
+                    submitButton.disabled = true;
+                });
+
+                // Add a click event listener to the reset button
+                resetButton.addEventListener('click', function() {
+                    // Enable the submit button
+                    submitButton.disabled = false;
+                });
+
             });
             }
     });
