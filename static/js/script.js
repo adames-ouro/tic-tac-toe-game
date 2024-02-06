@@ -1,4 +1,5 @@
 document.addEventListener('DOMContentLoaded', (event) => {
+
     document.getElementById('settings-form').addEventListener('submit', function(event) {
         event.preventDefault();
 
@@ -51,4 +52,5 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
         });
     }
+    
 });

@@ -35,11 +35,10 @@ def main():
 
     # Get board data from request
     board_data = data.get('board')
-    if board_data:
-        row = board_data.get('row')
-        col = board_data.get('col')
-        value = board_data.get('value')
-        game.board[row][col] = value
+    row = board_data.get('row')
+    col = board_data.get('col')
+    value = board_data.get('value')
+    game.board[row][col] = value
 
     # Get cell id and mark from data
     cell_id = data.get('id')
@@ -52,4 +51,4 @@ def main():
     return jsonify({'mark': mark})
 
 if __name__ == '__main__':
-    app.run(port=7000)
+    app.run(port=8000)
