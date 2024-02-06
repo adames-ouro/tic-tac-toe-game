@@ -96,4 +96,14 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
         });
     }
+    $.ajax({
+        url: '/usrmove',
+        method: 'POST',
+        data: JSON.stringify({id: cell_id, mark: mark}),
+        contentType: 'application/json',
+        success: function(response) {
+            // Add the 'x-mark' class to the cell with the returned ID
+            document.getElementById(response.cell_id).classList.add('x-mark');
+        }
+    });
 });

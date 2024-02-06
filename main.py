@@ -24,10 +24,26 @@ def board_map(cell_id):
     elif cell_id == "cell-8":
         return (2,2)
 
-def current_board(game):
-    a=1
-
-
+def grid_map(cell_id):
+    if cell_id == (0,0):
+        return "cell-0"
+    elif cell_id == (0,1):
+        return "cell-1"
+    elif cell_id == (0,2):
+        return "cell-2"
+    elif cell_id == (1,0):
+        return "cell-3"
+    elif cell_id == (1,1):
+        return "cell-4"
+    elif cell_id == (1,2):
+        return "cell-5"
+    elif cell_id == (2,0):
+        return "cell-6"
+    elif cell_id == (2,1):
+        return "cell-7"
+    elif cell_id == (2,2):
+        return "cell-8"
+    
 @app.route('/')
 def home():
     return render_template('index.html')
@@ -57,6 +73,36 @@ def reset_game():
 
 @app.route('/usrmove', methods=['POST'])
 def player_move():
+    def pc_move():
+        # get filled cell positions
+        rows, cols = set(), set()
+        for coord in game.memory.keys():
+            rows.add(coord[0])
+            cols.add(coord[1])
+
+        # update values for grids with goal of horz line
+        for _rows in rows:
+            for _elements in range(len(game.values)):
+                if game.values[_rows][_elements] is not None:
+                    game.values[_rows][_elements] += 2
+
+        # update values for grids with goal of vert line
+        for _cols in cols:
+            for _elements in range(len(game.values)):
+                if game.values[_elements][_cols] is not None:
+                    game.values[_elements][_cols] += 2
+
+        # Assuming 'game.values' is your list of lists
+        max_value = 2
+        max_pos = ()
+
+        for i, row in enumerate(game.values):
+            for j, value in enumerate(row):
+                if value is not None and value > max_value:
+                    max_value = value
+                    max_pos = (i, j)
+
+        return max_pos
     # Get JSON data from request
     data = request.get_json()
 
@@ -68,8 +114,11 @@ def player_move():
     game.mark(row, col)
 
     # implement stratergy using the board
-    # board()
-    return jsonify({'mark': mark})
+    pc_mark = pc_move()
+    html_id = grid_map(pc_mark)
+    print(html_id)
+    game.mark(pc_mark[0], pc_mark[1])
+    return jsonify({'mark': mark, 'cell_id': html_id})
 
 if __name__ == '__main__':
     app.run(port=8000)
