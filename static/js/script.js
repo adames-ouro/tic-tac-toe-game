@@ -74,7 +74,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         cells[i].addEventListener('click', function() {
             var cellId = this.id;
 
-            fetch('/main.py', {  // Changed route to '/main.py'
+            fetch('/usrmove', {  // Changed route to '/main.py'
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',

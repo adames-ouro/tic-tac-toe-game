@@ -18,11 +18,11 @@ class TicTacToe(object):
         '''
         # if the position is already taken
         if self.board[row][col] != '':
-            raise ValueError('Board position occupied')
+            raise ValueError('Board position occupied') # show error on web
         
         # if the game is already over
         if self.winner() is not None:
-            raise ValueError('Game is already complete')
+            raise ValueError('Game is already complete') # show on web
         
         # mark the position
         self.board[row][col] = self.player
