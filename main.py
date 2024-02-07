@@ -67,7 +67,6 @@ def reset_game():
 
 @app.route('/submit', methods=['POST'])
 def submit():
-    # Access the data from form
     player1_mark = request.form.get('player1')
 
     if player1_mark:
@@ -91,20 +90,19 @@ def submit():
 def player_move():
     data = request.get_json()
     cell_id = data.get('cell_id')
-    selected_mark = session['selected_mark'] #game.player
+    selected_mark = session['selected_mark']
     pc_mark = session['pc_mark']
     pc_cell = None
 
     if cell_id is not None:
         row, col = board_map(cell_id)
         game.mark(row, col)
-        game.board[row][col] = session['selected_mark']
-
+        game.board[row][col] = selected_mark
+    
         # pc move
         if game.end_game() is False:
             game.update()
             move = game.last_move
-            game.board[move[0]][move[1]] = session['pc_mark']
             pc_cell = grid_map(move)
                 
     return jsonify(board=game.board,cell_id=cell_id,selected_mark=selected_mark,pc_cell=pc_cell,pc_mark=pc_mark)
