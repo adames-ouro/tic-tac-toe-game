@@ -1,5 +1,6 @@
 from flask import Flask, request, jsonify, render_template, redirect, url_for
 from tictactoe import TicTacToe
+import random
 
 app = Flask(__name__)
 game = TicTacToe()
@@ -45,16 +46,18 @@ def grid_map(cell_id):
         return "cell-8"
 
 @app.route('/')
-@app.route('/home')
+@app.route('/home', methods=['GET','POST'])
 def home():
     selected_mark = request.args.get('selected_mark', None)
-    return render_template('index.html', selected_mark=selected_mark)
+    return render_template('index.html', selected_mark=selected_mark,game_board=game.board)
+
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
     # Reset the game state
     game.reset()
     return jsonify({'status': 'Game reset'})
+
 
 @app.route('/submit', methods=['POST'])
 def submit():
@@ -63,14 +66,31 @@ def submit():
     if player1_mark:
         # Assuming your TicTacToe class has a method or way to set the player's mark
         # Adjust this part according to your TicTacToe class implementation
-        game.player = player1_mark
-        print(game.player)
-        # Redirect to the home route after setting the player's mark
-        return redirect(url_for('home', selected_mark=player1_mark))
+    
+        # PC first move
+        if player1_mark == 'O':
+            corners = [(0,0),(0,2),(2,0),(2,2)]
+            random_choice = random.choice(corners)
+            game.mark(random_choice[0],random_choice[1])
+            game.board[random_choice[0]][random_choice[1]] = 'X'
+            game.player = 'O'
+            print(game.player)
+            # Redirect to the home route after setting the player's mark
+            return redirect(url_for('home', selected_mark=player1_mark,game_board=game.board))
+
+        elif player1_mark == 'X':
+            game.player = 'X'
+            print(game.player)
+            # Redirect to the home route after setting the player's mark
+            return redirect(url_for('home', selected_mark=player1_mark,game_board=game.board))
+    
     else:
         # Handle the case where no mark was selected
         # Redirect back to the home page or show an error message
         return redirect(url_for('home'))
+
+
+
 
 #@app.route('/usr', methods=['POST'])
 #def player_mark():
