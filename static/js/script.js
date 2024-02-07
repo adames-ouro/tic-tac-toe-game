@@ -69,31 +69,31 @@ document.addEventListener('DOMContentLoaded', (event) => {
     });
 
     // Add a click event listener to each cell
-    // var cells = document.querySelectorAll('.cell');
-    //for (var i = 0; i < cells.length; i++) {
-    //    cells[i].addEventListener('click', function() {
-    //        var cellId = this.id;
+    var cells = document.querySelectorAll('.cell');
+    for (var i = 0; i < cells.length; i++) {
+        cells[i].addEventListener('click', function() {
+            var cellId = this.id;
 
-    //        fetch('/usrmove', {  // Changed route to '/main.py'
-    //            method: 'POST',
-    //            headers: {
-    //                'Content-Type': 'application/json',
-    //            },
-    //            body: JSON.stringify({ id: cellId }),
-    //        })
-    //        .then(response => response.json())
-    //        .then(data => {
-    //            var mark = data.mark;
-    //            this.innerHTML = mark;
-    //            if (mark === 'X') {
-    //               this.classList.add('x-mark');
-    //            } else if (mark === 'O') {
-    //                this.classList.add('o-mark');
-    //            }
-    //        })
-    //        .catch((error) => {
-    //            console.error('Error:', error);
-    //        });
-    //    });
-    //}
+            fetch('/usrmove', {  // Changed route to '/main.py'
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ id: cellId }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                var mark = data.mark;
+                this.innerHTML = mark;
+                if (mark === 'X') {
+                   this.classList.add('x-mark');
+                } else if (mark === 'O') {
+                    this.classList.add('o-mark');
+                }
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    }
 });

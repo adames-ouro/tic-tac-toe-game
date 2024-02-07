@@ -48,15 +48,15 @@ def grid_map(cell_id):
 def home():
     return render_template('index.html')
 
-#@app.route('/usr', methods=['POST'])
-#def player_mark():
-#    # Get JSON data from request to choose mark
-#    data = request.get_json()
-#    mark = data.get('mark')
-#    slot = data.get('cell')
-#    row, col = board_map(slot)
-#    game.mark(row, col)
-#    return jsonify({'mark': mark})
+@app.route('/usr', methods=['POST'])
+def player_mark():
+    # Get JSON data from request to choose mark
+    data = request.get_json()
+    mark = data.get('mark')
+    slot = data.get('cell')
+    row, col = board_map(slot)
+    game.mark(row, col)
+    return jsonify({'mark': mark})
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
@@ -72,7 +72,7 @@ def reset_game():
 #    return jsonify({'pc_mark':pc_mark, 'pc_move':pc_move})
 
 #@app.route('/usrmove', methods=['POST'])
-#def player_mark():
+#def player_move():
 #    # Get JSON data from request to choose mark
 #    data = request.get_json()
 #    mark = data.get('mark')
