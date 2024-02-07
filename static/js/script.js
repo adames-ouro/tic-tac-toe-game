@@ -23,7 +23,7 @@ document.addEventListener('DOMContentLoaded', function() {
             // If you're using classes to indicate a mark (e.g., 'x-mark' or 'o-mark'), remove those classes
             cell.classList.remove('x-mark', 'o-mark');
         });
-        
+
         document.getElementById('settings-form').style.display = 'block';
         // Make an AJAX call to reset the game state on the server first
         fetch('/reset', {
@@ -47,7 +47,54 @@ document.addEventListener('DOMContentLoaded', function() {
             // Optionally handle the error state here
         });
     });
-    
-    
+
+    var cells = document.querySelectorAll('.cell');
+    for (var i = 0; i < cells.length; i++) {
+        cells[i].addEventListener('click', function() {
+            var cell_id = this.id;
+
+            fetch('/player-move', {
+                method: 'POST',
+                headers: {
+                    'Content-Type': 'application/json',
+                },
+                body: JSON.stringify({ cell_id: cell_id }),
+            })
+            .then(response => response.json())
+            .then(data => {
+                var selected_mark = data.selected_mark;
+                this.innerHTML = selected_mark;
+                if (selected_mark === 'X') {
+                   this.classList.add('x-mark');
+                } else if (selected_mark === 'O') {
+                    this.classList.add('o-mark');
+                }
+
+                // Automatically update the board with PC's move
+                var pcCellId = data.pc_cell;
+                var pcSelectedMark = data.pc_mark;
+                var pcCell = document.getElementById(pcCellId);
+
+                if (pcCellId && pcSelectedMark) {
+                    var pcCell = document.getElementById(pcCellId);
+                    if (pcCell) {
+                        pcCell.innerHTML = pcSelectedMark;
+                        if (pcSelectedMark === 'X') {
+                            pcCell.classList.add('x-mark');
+                        } else if (pcSelectedMark === 'O') {
+                            pcCell.classList.add('o-mark');
+                        }
+                    }
+                } else {
+                    // Handle scenario when PC has no move (e.g., game is over or board is full)
+                    console.log("No move possible for PC or game over");
+                }
+
+            })
+            .catch((error) => {
+                console.error('Error:', error);
+            });
+        });
+    }
 
 });

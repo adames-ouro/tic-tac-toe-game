@@ -51,7 +51,8 @@ def grid_map(cell_id):
 @app.route('/home', methods=['GET','POST'])
 def home():
     selected_mark = session.get('selected_mark', None)
-    return render_template('index.html',board=game.board, selected_mark=selected_mark)
+    cell_id = session.get('cell_id',None)
+    return render_template('index.html',board=game.board, cell_id=cell_id, selected_mark=selected_mark)
 
 
 @app.route('/reset', methods=['POST'])
@@ -66,6 +67,7 @@ def reset_game():
 def submit():
     # Access the data from form
     player1_mark = request.form.get('player1')
+
     if player1_mark:
         session['selected_mark'] = player1_mark
         if player1_mark == 'O':
@@ -73,47 +75,38 @@ def submit():
             random_choice = random.choice(corners)
             game.mark(random_choice[0],random_choice[1])
             game.board[random_choice[0]][random_choice[1]] = 'X'
-            game.player = 'O'
+            game.player = 'X'
             print(game.board)
 
         elif player1_mark == 'X':
-            game.player = 'X'
+            game.player = 'O'
             print(game.board)
 
     return redirect(url_for('home'))
             
+            
+### mood to fix last move of game
+@app.route('/player-move', methods=['POST'])
+def player_move():
+    data = request.get_json()
+    cell_id = data.get('cell_id')
+    selected_mark = game.player
+    pc_cell,pc_mark = None, None
 
+    if cell_id is not None:
+        row, col = board_map(cell_id)
+        game.mark(row, col)
+        selected_mark=game.player
+        game.board[row][col] = selected_mark
 
-
-
-
-#@app.route('/usr', methods=['POST'])
-#def player_mark():
-    # Get JSON data from request to choose mark
-#    data = request.get_json()
-#    mark = data.get('mark')
-#    slot = data.get('cell')
-#    row, col = board_map(slot)
-#    game.mark(row, col)
-#    return jsonify({'mark': mark})
-
-#@app.route('/usrmove', methods=['POST'])
-#def player_move():
-    # Get JSON data from request to choose mark
-#    data = request.get_json()
-#    mark = data.get('mark')
-#    slot = data.get('cell')
-#    row, col = board_map(slot)
-#    game.mark(row, col)
-#    return jsonify({'mark': mark})
-
-#@app.route('/pcmove', methods=['GET'])
-#def pc_move():
-#    game.update()
-#    pc_move = grid_map(game.last_move)
-#    pc_mark = game.player
-#    return jsonify({'pc_mark':pc_mark, 'pc_move':pc_move})
-
+        # pc move
+        if game.end_game() is False:
+            game.update()
+            move = game.last_move
+            pc_cell = grid_map(move)
+            pc_mark = game.player
+                
+    return jsonify(board=game.board,cell_id=cell_id,selected_mark=selected_mark,pc_cell=pc_cell,pc_mark=pc_mark)
 
 
 if __name__ == '__main__':
