@@ -96,33 +96,4 @@ document.addEventListener('DOMContentLoaded', (event) => {
             });
         });
     }
-
-    function makeComputerMove() {
-        fetch('/computer_move', {
-            method: 'GET', // Correcting the syntax here
-            headers: {
-                'Content-Type': 'application/json',
-            }
-        })
-        .then(response => response.json())
-        .then(data => {
-            // Use the response data to update the game board
-            // Assuming the backend returns the cell ID and the mark to use
-            const cell = document.getElementById(data.html_id);
-            if(cell) {
-                cell.textContent = data.mark; // Update cell with 'X' or 'O'
-                cell.classList.add(data.style); // Add the appropriate class for styling
-            }
-            var mark = data.mark;
-            this.innerHTML = mark;
-            if (mark === 'X') {
-                this.classList.add('x-mark');
-            } else if (mark === 'O') {
-                this.classList.add('o-mark');
-            }
-        })
-        .catch(error => console.error('Error:', error));        
-    }
-    // Make the computer move
-    makeComputerMove();    
 });

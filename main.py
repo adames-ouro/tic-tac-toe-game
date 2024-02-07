@@ -53,16 +53,9 @@ def player_mark():
     # Get JSON data from request to choose mark
     data = request.get_json()
     mark = data.get('mark')
-    slot = data.get('cell')
-
-    if mark == 'O':
-        game.player = 'X'
-        row, col = board_map(slot)
-        game.mark(row, col)
-        game.player = mark
-
-    else:
-        game.player = mark
+    #slot = data.get('cell')
+    #row, col = board_map(slot)
+    #game.mark(row, col)
     return jsonify({'mark': mark})
 
 @app.route('/reset', methods=['POST'])
@@ -71,7 +64,7 @@ def reset_game():
     game.reset()
     return jsonify({'status': 'Game reset'})
 
-@app.route('/computer_move', methods=['GET'])
+@app.route('/computer_move', methods=['POST'])
 def automatic_move():
     def pc_move():
         # get filled cell positions
@@ -127,7 +120,6 @@ def player_move():
     mark = game.player
     game.mark(row, col)
     return jsonify({'mark': mark})
-
 
 if __name__ == '__main__':
     app.run(port=8000)
