@@ -11,6 +11,7 @@ class TicTacToe(object):
         self.values[0][2] += 2
         self.values[2][0] += 2
         self.values[2][2] += 2
+        self.last_move = ()
 
     def reset(self):
         '''Reset the game to the initial state'''
@@ -22,6 +23,7 @@ class TicTacToe(object):
         self.values[0][2] += 2
         self.values[2][0] += 2
         self.values[2][2] += 2
+        self.last_move = ()
 
     def mark(self, row, col): # player makes mark
         '''
@@ -47,6 +49,8 @@ class TicTacToe(object):
                 self.player = 'O'
             else:
                 self.player = 'X'
+            
+            self.last_move = (row,col)
 
     def update(self): # pc makes mark
         if self.end_game() is False:
@@ -83,6 +87,7 @@ class TicTacToe(object):
                     if value is not None and value > max_value:
                         max_value = value
                         max_pos = (i, j)
+
             offensive_move = max_pos
 
             #### override answer if defensive move is required (prevent a loss)
@@ -130,6 +135,8 @@ class TicTacToe(object):
             else:
                 self.player = 'X'
 
+            self.last_move = (max_pos[0],max_pos[1])
+
 
     def _is_win(self,mark):
         '''Check if the board configuration is a win for the given player'''
@@ -148,6 +155,7 @@ class TicTacToe(object):
         for mark in 'XO':
             if self._is_win(mark):
                 return True
+            
         empty_cells = 0
         for i in range(3):
             for j in range(3):

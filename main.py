@@ -53,9 +53,9 @@ def player_mark():
     # Get JSON data from request to choose mark
     data = request.get_json()
     mark = data.get('mark')
-    #slot = data.get('cell')
-    #row, col = board_map(slot)
-    #game.mark(row, col)
+    slot = data.get('cell')
+    row, col = board_map(slot)
+    game.mark(row, col)
     return jsonify({'mark': mark})
 
 @app.route('/reset', methods=['POST'])
@@ -64,60 +64,20 @@ def reset_game():
     game.reset()
     return jsonify({'status': 'Game reset'})
 
-@app.route('/computer_move', methods=['POST'])
-def automatic_move():
-    def pc_move():
-        # get filled cell positions
-        rows, cols = set(), set()
-        for coord in game.memory.keys():
-            rows.add(coord[0])
-            cols.add(coord[1])
-
-        # update values for grids with goal of horz line
-        for _rows in rows:
-            for _elements in range(len(game.values)):
-                if game.values[_rows][_elements] is not None:
-                    game.values[_rows][_elements] += 2
-
-        # update values for grids with goal of vert line
-        for _cols in cols:
-            for _elements in range(len(game.values)):
-                if game.values[_elements][_cols] is not None:
-                    game.values[_elements][_cols] += 2
-
-        # Assuming 'game.values' is your list of lists
-        max_value = 2
-        max_pos = ()
-
-        for i, row in enumerate(game.values):
-            for j, value in enumerate(row):
-                if value is not None and value > max_value:
-                    max_value = value
-                    max_pos = (i, j)
-
-        if game.player == 'X':
-            game.player = 'O'
-        else:
-            game.player = 'X'
-
-        return max_pos
-    
-    # implement stratergy using the board
-    pc_mark = pc_move()
-    html_id = grid_map(pc_mark)
-    game.mark(pc_mark[0], pc_mark[1])
-    return jsonify({'mark': game.player, 'html_id': html_id})
+#@app.route('/pcmove', methods=['GET'])
+#def pc_move():
+#    game.update()
+#    pc_move = grid_map(game.last_move)
+#    pc_mark = game.player
+#    return jsonify({'pc_mark':pc_mark, 'pc_move':pc_move})
 
 @app.route('/usrmove', methods=['POST'])
-def player_move():
-    # Get JSON data from request
+def player_mark():
+    # Get JSON data from request to choose mark
     data = request.get_json()
-
-    # Get cell id and mark from data
-    cell_id = data.get('id')
     mark = data.get('mark')
-    row, col = board_map(cell_id)
-    mark = game.player
+    slot = data.get('cell')
+    row, col = board_map(slot)
     game.mark(row, col)
     return jsonify({'mark': mark})
 
