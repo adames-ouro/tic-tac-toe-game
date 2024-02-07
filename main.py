@@ -1,9 +1,11 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask import Flask, request, jsonify, render_template, redirect, url_for, session
 from tictactoe import TicTacToe
 import random
 
 app = Flask(__name__)
+app.secret_key = 'your_secret_key'
 game = TicTacToe()
+selected_mark = None
 
 def board_map(cell_id):
     if cell_id == "cell-0":
@@ -48,15 +50,16 @@ def grid_map(cell_id):
 @app.route('/')
 @app.route('/home', methods=['GET','POST'])
 def home():
-    selected_mark = request.args.get('selected_mark', None)
-    return render_template('index.html', selected_mark=selected_mark,game_board=game.board)
+    selected_mark = session.get('selected_mark', None)
+    return render_template('index.html',board=game.board, selected_mark=selected_mark)
 
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
     # Reset the game state
     game.reset()
-    return jsonify({'status': 'Game reset'})
+    session.pop('selected_mark', None)
+    return redirect(url_for('home'))
 
 
 @app.route('/submit', methods=['POST'])
@@ -64,20 +67,22 @@ def submit():
     # Access the data from form
     player1_mark = request.form.get('player1')
     if player1_mark:
+        session['selected_mark'] = player1_mark
         if player1_mark == 'O':
             corners = [(0,0),(0,2),(2,0),(2,2)]
             random_choice = random.choice(corners)
             game.mark(random_choice[0],random_choice[1])
             game.board[random_choice[0]][random_choice[1]] = 'X'
             game.player = 'O'
-            return redirect(url_for('home'))
+            print(game.board)
 
         elif player1_mark == 'X':
             game.player = 'X'
-            return redirect(url_for('home'))
-    
-    else:
-        return redirect(url_for('home'))
+            print(game.board)
+
+    return redirect(url_for('home'))
+            
+
 
 
 
