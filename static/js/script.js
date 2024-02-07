@@ -49,7 +49,12 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
     // Add a click event listener to the reset button
     resetButton.addEventListener('click', function() {
+        // Enable the submit button
         submitButton.disabled = false;
+    });
+
+    // Add a click event listener to the reset button
+    resetButton.addEventListener('click', function() {
         // Make a request to the /reset route to reset the game state
         fetch('/reset', {
             method: 'POST',
@@ -69,7 +74,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         cells[i].addEventListener('click', function() {
             var cellId = this.id;
 
-            fetch('/usrmove', {
+            fetch('/usrmove', {  // Changed route to '/main.py'
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
