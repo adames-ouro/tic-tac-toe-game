@@ -85,7 +85,9 @@ def submit():
     return redirect(url_for('home'))
             
 
-### mood to fix last move of game
+### mod to fix last move of game and add line along 3 marks
+### When X and place 3 marks, there shoul not be a pc response because game is already over
+
 @app.route('/player-move', methods=['POST'])
 def player_move():
     data = request.get_json()
