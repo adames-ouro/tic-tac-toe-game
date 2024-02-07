@@ -71,15 +71,15 @@ def reset_game():
 #    pc_mark = game.player
 #    return jsonify({'pc_mark':pc_mark, 'pc_move':pc_move})
 
-#@app.route('/usrmove', methods=['POST'])
-#def player_move():
-#    # Get JSON data from request to choose mark
-#    data = request.get_json()
-#    mark = data.get('mark')
-#    slot = data.get('cell')
-#    row, col = board_map(slot)
-#    game.mark(row, col)
-#    return jsonify({'mark': mark})
+@app.route('/usrmove', methods=['POST'])
+def player_move():
+    # Get JSON data from request to choose mark
+    data = request.get_json()
+    mark = data.get('mark')
+    slot = data.get('cell')
+    row, col = board_map(slot)
+    game.mark(row, col)
+    return jsonify({'mark': mark})
 
 if __name__ == '__main__':
     app.run(port=8000)
