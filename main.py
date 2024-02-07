@@ -87,6 +87,7 @@ def submit():
 
 ### mod to fix last move of game and add line along 3 marks
 ### When X and place 3 marks, there shoul not be a pc response because game is already over
+### When O is player, review logic and/or conditions for marks and add line
 
 @app.route('/player-move', methods=['POST'])
 def player_move():
