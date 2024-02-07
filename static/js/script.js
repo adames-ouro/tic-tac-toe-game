@@ -8,7 +8,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     var elements = ['cell-0', 'cell-2', 'cell-6', 'cell-8'];
     var randomIndex = Math.floor(Math.random() * elements.length); // Generate a random index
     var chosenElement = elements[randomIndex]; // Use the random index to pick an element
-    var cell = document.getElementById(chosenElement); // mark that corner
+    var init_cell = document.getElementById(chosenElement); // mark that corner
 
     // Add a click event listener to the submit button
     submitButton.addEventListener('click', function(event) {
@@ -32,10 +32,10 @@ document.addEventListener('DOMContentLoaded', (event) => {
 
         if (selectedMark === 'O') {
             // Add 'X' to the cell element
-            cell.textContent = 'X';
+            init_cell.textContent = 'X';
 
             // Apply the .x-mark CSS class
-            cell.classList.add('x-mark');
+            init_cell.classList.add('x-mark');
 
             // Disable the submit button
             submitButton.disabled = true;
@@ -51,10 +51,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
     resetButton.addEventListener('click', function() {
         // Enable the submit button
         submitButton.disabled = false;
-    });
 
-    // Add a click event listener to the reset button
-    resetButton.addEventListener('click', function() {
         // Make a request to the /reset route to reset the game state
         fetch('/reset', {
             method: 'POST',
@@ -74,7 +71,7 @@ document.addEventListener('DOMContentLoaded', (event) => {
         cells[i].addEventListener('click', function() {
             var cellId = this.id;
 
-            fetch('/usrmove', {  // Changed route to '/main.py'
+            fetch('/usrmove', {
                 method: 'POST',
                 headers: {
                     'Content-Type': 'application/json',
