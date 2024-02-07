@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for
+from flask import Flask, request, jsonify, render_template, redirect, url_for #, session
 from tictactoe import TicTacToe
 import random
 
@@ -64,25 +64,23 @@ def submit():
     # Access the data from form
     player1_mark = request.form.get('player1')
     if player1_mark:
-        # Assuming your TicTacToe class has a method or way to set the player's mark
-        # Adjust this part according to your TicTacToe class implementation
-    
-        # PC first move
         if player1_mark == 'O':
             corners = [(0,0),(0,2),(2,0),(2,2)]
             random_choice = random.choice(corners)
             game.mark(random_choice[0],random_choice[1])
             game.board[random_choice[0]][random_choice[1]] = 'X'
             game.player = 'O'
-            print(game.player)
+            #session['game_board'] = game.board
+            #session['selected_mark'] = player1_mark
             # Redirect to the home route after setting the player's mark
-            return redirect(url_for('home', selected_mark=player1_mark,game_board=game.board))
+            return redirect(url_for('home'))
 
         elif player1_mark == 'X':
             game.player = 'X'
-            print(game.player)
+            #session['game_board'] = game.board
+            #session['selected_mark'] = player1_mark
             # Redirect to the home route after setting the player's mark
-            return redirect(url_for('home', selected_mark=player1_mark,game_board=game.board))
+            return redirect(url_for('home'))
     
     else:
         # Handle the case where no mark was selected
