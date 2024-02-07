@@ -90,11 +90,9 @@ def submit():
 def player_move():
     data = request.get_json()
     cell_id = data.get('cell_id')
-    selected_mark = session['selected_mark']
-    pc_mark = session['pc_mark']
     pc_cell = None
 
-    if cell_id is not None:
+    if (cell_id is not None) and (game.end_game() is False):
         row, col = board_map(cell_id)
         game.mark(row, col)
         game.board[row][col] = selected_mark
@@ -105,7 +103,7 @@ def player_move():
             move = game.last_move
             pc_cell = grid_map(move)
                 
-    return jsonify(board=game.board,cell_id=cell_id,selected_mark=selected_mark,pc_cell=pc_cell,pc_mark=pc_mark)
+    return jsonify(board=game.board,cell_id=cell_id,selected_mark=session['selected_mark'],pc_cell=pc_cell,pc_mark=session['pc_mark'])
 
 
 if __name__ == '__main__':
