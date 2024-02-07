@@ -53,9 +53,9 @@ def player_mark():
     # Get JSON data from request to choose mark
     data = request.get_json()
     mark = data.get('mark')
-    slot = data.get('cell')
-    row, col = board_map(slot)
-    game.mark(row, col)
+    #slot = data.get('cell')
+    #row, col = board_map(slot)
+    #game.mark(row, col)
     return jsonify({'mark': mark})
 
 @app.route('/reset', methods=['POST'])
