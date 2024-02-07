@@ -58,7 +58,6 @@ def home():
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
-    # Reset the game state
     game.reset()
     session.pop('selected_mark', None)
     session.pop('pc_mark', None)
@@ -82,10 +81,7 @@ def submit():
 
             corners = [(0,0),(0,2),(2,0),(2,2)]
             random_choice = random.choice(corners)
-            #game.player =  session['pc_mark']
-            #game.mark(random_choice[0],random_choice[1])
-            game.board[random_choice[0]][random_choice[1]] = 'X'
-            #game.player = session['selected_mark']
+            game.board[random_choice[0]][random_choice[1]] = session['pc_mark']
             
     return redirect(url_for('home'))
             
@@ -102,15 +98,14 @@ def player_move():
     if cell_id is not None:
         row, col = board_map(cell_id)
         game.mark(row, col)
-        #game.board[row][col] = selected_mark
-        #selected_mark=game.player
-    
+        game.board[row][col] = session['selected_mark']
+
         # pc move
         if game.end_game() is False:
             game.update()
             move = game.last_move
+            game.board[move[0]][move[1]] = session['pc_mark']
             pc_cell = grid_map(move)
-            #pc_mark = game.player
                 
     return jsonify(board=game.board,cell_id=cell_id,selected_mark=selected_mark,pc_cell=pc_cell,pc_mark=pc_mark)
 
