@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template, redirect, url_for, session
+from flask import Flask, request, jsonify, render_template, redirect, url_for , session
 from tictactoe import TicTacToe
 import random
 
@@ -51,8 +51,9 @@ def grid_map(cell_id):
 @app.route('/home', methods=['GET','POST'])
 def home():
     selected_mark = session.get('selected_mark', None)
+    pc_mark = session.get('selected_mark', None)
     cell_id = session.get('cell_id',None)
-    return render_template('index.html',board=game.board, cell_id=cell_id, selected_mark=selected_mark)
+    return render_template('index.html',board=game.board, cell_id=cell_id, selected_mark=selected_mark,pc_mark=pc_mark)
 
 
 @app.route('/reset', methods=['POST'])
@@ -60,6 +61,8 @@ def reset_game():
     # Reset the game state
     game.reset()
     session.pop('selected_mark', None)
+    session.pop('pc_mark', None)
+    session.pop('cell_id', None)
     return redirect(url_for('home'))
 
 
@@ -70,41 +73,44 @@ def submit():
 
     if player1_mark:
         session['selected_mark'] = player1_mark
-        if player1_mark == 'O':
+
+        if session['selected_mark'] == 'X':
+            session['pc_mark'] = 'O'
+
+        elif session['selected_mark'] == 'O':
+            session['pc_mark'] = 'X'
+
             corners = [(0,0),(0,2),(2,0),(2,2)]
             random_choice = random.choice(corners)
-            game.mark(random_choice[0],random_choice[1])
+            #game.player =  session['pc_mark']
+            #game.mark(random_choice[0],random_choice[1])
             game.board[random_choice[0]][random_choice[1]] = 'X'
-            game.player = 'X'
-            print(game.board)
-
-        elif player1_mark == 'X':
-            game.player = 'O'
-            print(game.board)
-
+            #game.player = session['selected_mark']
+            
     return redirect(url_for('home'))
             
-            
+
 ### mood to fix last move of game
 @app.route('/player-move', methods=['POST'])
 def player_move():
     data = request.get_json()
     cell_id = data.get('cell_id')
-    selected_mark = game.player
-    pc_cell,pc_mark = None, None
+    selected_mark = session['selected_mark'] #game.player
+    pc_mark = session['pc_mark']
+    pc_cell = None
 
     if cell_id is not None:
         row, col = board_map(cell_id)
         game.mark(row, col)
-        selected_mark=game.player
-        game.board[row][col] = selected_mark
-
+        #game.board[row][col] = selected_mark
+        #selected_mark=game.player
+    
         # pc move
         if game.end_game() is False:
             game.update()
             move = game.last_move
             pc_cell = grid_map(move)
-            pc_mark = game.player
+            #pc_mark = game.player
                 
     return jsonify(board=game.board,cell_id=cell_id,selected_mark=selected_mark,pc_cell=pc_cell,pc_mark=pc_mark)
 
