@@ -11,14 +11,14 @@
     <div class="tic-tac-toe">
         <h1 class="header">Tic-Tac-Toe Game</h1>
 
-        <form id="settings-form">
+        <form action="/submit" method="post" id="settings-form">
             <label for="player1">Choose mark:</label>
             <div>
-                <input type="radio" id="x" name="player1" value="X">
+                <input type="radio" id="x" name="player1" value="X" {% if selected_mark == 'X' %}checked{% endif %}>
                 <label for="X">X</label>
             </div>
             <div>
-                <input type="radio" id="o" name="player1" value="O">
+                <input type="radio" id="o" name="player1" value="O" {% if selected_mark == 'O' %}checked{% endif %}>
                 <label for="O">O</label>
             </div>
             <input type="submit" value="Submit">

@@ -1,4 +1,4 @@
-from flask import Flask, request, jsonify, render_template
+from flask import Flask, request, jsonify, render_template, redirect, url_for
 from tictactoe import TicTacToe
 
 app = Flask(__name__)
@@ -43,16 +43,34 @@ def grid_map(cell_id):
         return "cell-7"
     elif cell_id == (2,2):
         return "cell-8"
-    
+
 @app.route('/')
+@app.route('/home')
 def home():
-    return render_template('index.html')
+    selected_mark = request.args.get('selected_mark', None)
+    return render_template('index.html', selected_mark=selected_mark)
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
     # Reset the game state
     game.reset()
     return jsonify({'status': 'Game reset'})
+
+@app.route('/submit', methods=['POST'])
+def submit():
+    # Access the data from form
+    player1_mark = request.form.get('player1')
+    if player1_mark:
+        # Assuming your TicTacToe class has a method or way to set the player's mark
+        # Adjust this part according to your TicTacToe class implementation
+        game.player = player1_mark
+        print(game.player)
+        # Redirect to the home route after setting the player's mark
+        return redirect(url_for('home', selected_mark=player1_mark))
+    else:
+        # Handle the case where no mark was selected
+        # Redirect back to the home page or show an error message
+        return redirect(url_for('home'))
 
 #@app.route('/usr', methods=['POST'])
 #def player_mark():
