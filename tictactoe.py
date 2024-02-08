@@ -32,6 +32,12 @@ class TicTacToe(object):
         Put an X or O mark on the board at position (row,col) 
         for next player's turn.
         '''
+        if self.end_game():
+            raise Exception("The game has already ended.")
+
+        if self.board[row][col] != '':
+            raise Exception("This cell is already taken. Please choose another.")
+        
         if self.end_game() is False:
             # mark the position
             self.board[row][col] = self.player

@@ -51,6 +51,7 @@
 }
 
 #reset-button {
+    /* existing styles */
     background-color: #4CAF50; /* Green */
     border: none;
     color: white;
@@ -58,6 +59,7 @@
     text-align: center;
     text-decoration: none;
     display: inline-block;
+    align-items: center;
     font-size: 16px;
     margin: 4px 2px;
     cursor: pointer;
