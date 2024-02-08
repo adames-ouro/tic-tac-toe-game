@@ -106,7 +106,7 @@ def player_move():
         # pc move
         if game.end_game() is False:
             game.update()
-            move = game.last_move
+            move = game.last_move                
             pc_cell = grid_map(move)
                 
     return jsonify(board=game.board,cell_id=cell_id,selected_mark=session['selected_mark'],pc_cell=pc_cell,pc_mark=session['pc_mark'])

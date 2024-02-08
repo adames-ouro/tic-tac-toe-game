@@ -91,23 +91,6 @@ class TicTacToe(object):
             offensive_move = max_pos
 
             #### override answer if defensive move is required (prevent a loss)
-                        
-            # Check rows and columns for potential wins
-            for i in range(3):
-                # Check rows
-                if self.board[i].count(pc) == 2:
-                    try:
-                        max_pos = (i, self.board[i].index(''))
-                    except:
-                        max_pos = offensive_move
-                
-                # Check columns
-                col = [self.board[0][i], self.board[1][i], self.board[2][i]]
-                if col.count(pc) == 2:
-                    try:
-                        max_pos = (col.index(''), i)
-                    except:
-                        max_pos = offensive_move
 
             # Check diagonals for potential wins
             diag1 = [self.board[i][i] for i in range(3)]
@@ -124,6 +107,23 @@ class TicTacToe(object):
                 except:
                     max_pos = offensive_move
 
+            # Check rows and columns for potential wins
+            for i in range(3):
+                # Check rows
+                if self.board[i].count(pc) == 2:
+                    try:
+                        max_pos = (i, self.board[i].index(''))
+                    except:
+                        max_pos = offensive_move
+                
+                # Check columns
+                col = [self.board[0][i], self.board[1][i], self.board[2][i]]
+                if col.count(pc) == 2:
+                    try:
+                        max_pos = (col.index(''), i)
+                    except:
+                        max_pos = offensive_move
+                        
             # mark the position
             self.board[max_pos[0]][max_pos[1]] = self.player
             self.values[max_pos[0]][max_pos[1]] = None
@@ -141,14 +141,22 @@ class TicTacToe(object):
     def _is_win(self,mark):
         '''Check if the board configuration is a win for the given player'''
         board = self.board
-        return (mark == board[0][0] == board[0][1] == board[0][2] or # row 0
-                mark == board[1][0] == board[1][1] == board[1][2] or # row 1
-                mark == board[2][0] == board[2][1] == board[2][2] or # row 2
-                mark == board[0][0] == board[1][0] == board[2][0] or # column 0
-                mark == board[0][1] == board[1][1] == board[2][1] or # column 1
-                mark == board[0][2] == board[1][2] == board[2][2] or # column 2
-                mark == board[0][0] == board[1][1] == board[2][2] or # diagonals
-                mark == board[0][2] == board[1][1] == board[2][0])
+        return ('X' == board[0][0] == board[0][1] == board[0][2] or # row 0
+                'X' == board[1][0] == board[1][1] == board[1][2] or # row 1
+                'X' == board[2][0] == board[2][1] == board[2][2] or # row 2
+                'X' == board[0][0] == board[1][0] == board[2][0] or # column 0
+                'X' == board[0][1] == board[1][1] == board[2][1] or # column 1
+                'X' == board[0][2] == board[1][2] == board[2][2] or # column 2
+                'X' == board[0][0] == board[1][1] == board[2][2] or # diagonals
+                'X' == board[0][2] == board[1][1] == board[2][0] or # other mark
+                'O' == board[0][0] == board[0][1] == board[0][2] or # row 0
+                'O' == board[1][0] == board[1][1] == board[1][2] or # row 1
+                'O' == board[2][0] == board[2][1] == board[2][2] or # row 2
+                'O' == board[0][0] == board[1][0] == board[2][0] or # column 0
+                'O' == board[0][1] == board[1][1] == board[2][1] or # column 1
+                'O' == board[0][2] == board[1][2] == board[2][2] or # column 2
+                'O' == board[0][0] == board[1][1] == board[2][2] or # diagonals
+                'O' == board[0][2] == board[1][1] == board[2][0])
     
     def end_game(self):
         '''Return the True if game ended'''
