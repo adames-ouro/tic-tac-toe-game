@@ -93,7 +93,6 @@ def submit():
             
     return redirect(url_for('home'))
 
-
 @app.route('/player-move', methods=['POST'])
 def player_move():
     data = request.get_json()

@@ -1,5 +1,5 @@
 class TicTacToe(object):
-    '''Management of a Tic-Tac-Toe game (does not do strategy)'''
+    '''Management of a Tic-Tac-Toe game'''
 
     def __init__(self):
         '''Start a new game'''
