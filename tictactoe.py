@@ -59,71 +59,58 @@ class TicTacToe(object):
             elif self.player == 'O':
                 pc = 'X'
 
-            # No immediate threats, go greedy
-            rows, cols = set(), set()
-
-            for coord in self.memory.keys():
-                rows.add(coord[0])
-                cols.add(coord[1])
-
-            # update values for grids with goal of horz line
-            for _rows in rows:
-                for _elements in range(len(self.values)):
-                    if self.values[_rows][_elements] is not None:
-                        self.values[_rows][_elements] += 2
-
-            # update values for grids with goal of vert line
-            for _cols in cols:
-                for _elements in range(len(self.values)):
-                    if self.values[_elements][_cols] is not None:
-                        self.values[_elements][_cols] += 2
-
-            # Assuming 'game.values' is your list of lists
-            max_value = -1
-            max_pos = ()
-
-            for i, row in enumerate(self.values):
-                for j, value in enumerate(row):
-                    if value is not None and value > max_value:
-                        max_value = value
-                        max_pos = (i, j)
-
-            offensive_move = max_pos
-
-            #### override answer if defensive move is required (prevent a loss)
-
             # Check diagonals for potential wins
             diag1 = [self.board[i][i] for i in range(3)]
-            if diag1.count(pc) == 2:
-                try:
-                    max_pos = (diag1.index(''), diag1.index(''))
-                except:
-                    max_pos = offensive_move
-
             diag2 = [self.board[i][2-i] for i in range(3)]
-            if diag2.count(pc) == 2:
-                try:
-                    max_pos = (diag2.index(''), 2-diag2.index(''))
-                except:
-                    max_pos = offensive_move
+            max_pos = ()
 
-            # Check rows and columns for potential wins
-            for i in range(3):
-                # Check rows
-                if self.board[i].count(pc) == 2:
-                    try:
+            if diag1.count(pc) == 2:
+                max_pos = (diag1.index(''), diag1.index(''))
+
+            elif diag2.count(pc) == 2:
+                max_pos = (diag2.index(''), 2-diag2.index(''))
+
+            else:
+                # Check rows and columns for potential wins
+                for i in range(3):
+                    # Check rows
+                    if self.board[i].count(pc) == 2:
                         max_pos = (i, self.board[i].index(''))
-                    except:
-                        max_pos = offensive_move
-                
-                # Check columns
-                col = [self.board[0][i], self.board[1][i], self.board[2][i]]
-                if col.count(pc) == 2:
-                    try:
+                    
+                    # Check columns
+                    col = [self.board[0][i], self.board[1][i], self.board[2][i]]
+                    if col.count(pc) == 2:
                         max_pos = (col.index(''), i)
-                    except:
-                        max_pos = offensive_move
-                        
+
+            if max_pos == ():
+                # No immediate threats, go greedy
+                rows, cols = set(), set()
+
+                for coord in self.memory.keys():
+                    rows.add(coord[0])
+                    cols.add(coord[1])
+
+                # update values for grids with goal of horz line
+                for _rows in rows:
+                    for _elements in range(len(self.values)):
+                        if self.values[_rows][_elements] is not None:
+                            self.values[_rows][_elements] += 2
+
+                # update values for grids with goal of vert line
+                for _cols in cols:
+                    for _elements in range(len(self.values)):
+                        if self.values[_elements][_cols] is not None:
+                            self.values[_elements][_cols] += 2
+
+                # Assuming 'game.values' is your list of lists
+                max_value = -1
+
+                for i, row in enumerate(self.values):
+                    for j, value in enumerate(row):
+                        if value is not None and value > max_value:
+                            max_value = value
+                            max_pos = (i, j)
+                            
             # mark the position
             self.board[max_pos[0]][max_pos[1]] = self.player
             self.values[max_pos[0]][max_pos[1]] = None
@@ -138,7 +125,7 @@ class TicTacToe(object):
             self.last_move = (max_pos[0],max_pos[1])
 
 
-    def _is_win(self,mark):
+    def _is_win(self):
         '''Check if the board configuration is a win for the given player'''
         board = self.board
         return ('X' == board[0][0] == board[0][1] == board[0][2] or # row 0
@@ -160,16 +147,17 @@ class TicTacToe(object):
     
     def end_game(self):
         '''Return the True if game ended'''
-        for mark in 'XO':
-            if self._is_win(mark):
-                return True
-            
+        if self._is_win():
+            return True
+
         empty_cells = 0
         for i in range(3):
             for j in range(3):
                 if self.board[i][j] == '':
                     empty_cells = empty_cells + 1
+
         if (empty_cells == 0):
             return True # tie
+        
         else:
             return False
