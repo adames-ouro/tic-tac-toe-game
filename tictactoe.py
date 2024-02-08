@@ -27,7 +27,7 @@ class TicTacToe(object):
         self.last_move = ()
         self.pc = ''
 
-    def mark(self, row, col): # player makes mark
+    def player_mark(self, row, col): # player makes mark
         '''
         Put an X or O mark on the board at position (row,col) 
         for next player's turn.
@@ -39,90 +39,66 @@ class TicTacToe(object):
             self.memory[(row,col)] =  self.player
             self.last_move = (row,col)
 
-    def update(self): # pc makes mark
+
+    def pc_mark(self):
+        '''
+        Put an X or O mark on the board at position (row,col) 
+        '''
         if self.end_game() is False:
             if self.player == 'X':
                 self.pc = 'O'
             elif self.player == 'O':
                 self.pc = 'X'
 
-            # Check diagonals for potential wins
-            diag1 = [self.board[i][i] for i in range(3)]
-            diag2 = [self.board[i][2-i] for i in range(3)]
-            max_pos = ()
-            
-            if diag1.count(self.pc) == 2:
-                try:
-                    max_pos = (diag1.index(''), diag1.index(''))
-                except:
-                    pass
-                
-            elif diag2.count(self.pc) == 2:
-                try:
-                    max_pos = (diag2.index(''), 2-diag2.index(''))
-                except:
-                    pass
+            best_score = -1
+            best_move = None
+
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == '':
+                        self.board[i][j] = self.pc
+                        score = self.evaluate_move(i, j, self.pc)
+                        self.board[i][j] = ''
+                        if score > best_score:
+                            best_score = score
+                            best_move = (i, j)
+
+            if best_move:
+                self.board[best_move[0]][best_move[1]] = self.pc
+                self.values[best_move[0]][best_move[1]] = None
+                self.memory[(best_move[0],best_move[1])] =  self.pc
+                self.last_move = (best_move[0],best_move[1])
             else:
-                # Check rows and columns for potential wins
                 for i in range(3):
-                    # Check rows
-                    if self.board[i].count(self.pc) == 2:
-                        try:
-                            max_pos = (i, self.board[i].index(''))
-                        except:
-                            pass
-                    
-                    # Check columns
-                    col = [self.board[0][i], self.board[1][i], self.board[2][i]]
-                    if col.count(self.pc) == 2:
-                        try:
-                            max_pos = (col.index(''), i)
-                        except:
-                            pass
+                    for j in range(3):
+                        if self.board[i][j] == '':
+                            self.board[i][j] = self.pc
+                            self.values[i][j] = None
+                            self.memory[(i,j)] =  self.pc
+                            self.last_move = (i,j)
+                            return
 
-                    ### go greedy
-                    rows, cols = set(), set()
+    def evaluate_move(self, row, col, mark):
+        '''Eval move'''
+        score = 0
+        if self.check_potential_win(row, col, mark):
+            score += 1
+        return score
 
-                    for coord in self.memory.keys():
-                        rows.add(coord[0])
-                        cols.add(coord[1])
-
-                    # update values for grids with goal of horz line
-                    for _rows in rows:
-                        for _elements in range(len(self.values)):
-                            if self.values[_rows][_elements] is not None:
-                                self.values[_rows][_elements] += 2
-
-                    # update values for grids with goal of vert line
-                    for _cols in cols:
-                        for _elements in range(len(self.values)):
-                            if self.values[_elements][_cols] is not None:
-                                self.values[_elements][_cols] += 2
-
-                    # Assuming 'game.values' is your list of lists
-                    max_value = -1
-
-                    for i, row in enumerate(self.values):
-                        for j, value in enumerate(row):
-                            if value is not None and value > max_value:
-                                max_value = value
-                                max_pos = (i, j)
-
-            try:
-                self.board[max_pos[0]][max_pos[1]] = self.pc
-                self.values[max_pos[0]][max_pos[1]] = None
-                self.memory[(max_pos[0],max_pos[1])] =  self.pc
-                self.last_move = (max_pos[0],max_pos[1])
-            except:
-                # if no need for defensive nor ofensive, pick first empty
-                for i, sublist in enumerate(self.board):
-                    if '' in sublist:
-                        j = sublist.index('')
-                        max_pos = (i, j)
-                self.board[max_pos[0]][max_pos[1]] = self.pc
-                self.values[max_pos[0]][max_pos[1]] = None
-                self.memory[(max_pos[0],max_pos[1])] =  self.pc
-                self.last_move = (max_pos[0],max_pos[1])
+    def check_potential_win(self, row, col, mark):
+        '''check if move adds to a win'''
+        # Check row
+        if all(self.board[row][c] == mark or c == col for c in range(3)):
+            return True
+        # Check column
+        if all(self.board[r][col] == mark or r == row for r in range(3)):
+            return True
+        # Check diagonal (if applicable)
+        if row == col and all(self.board[i][i] == mark or i == row for i in range(3)):
+            return True
+        if row + col == 2 and all(self.board[i][2-i] == mark or i == row for i in range(3)):
+            return True
+        return False                
     
     def end_game(self):
         '''Return the True if game ended'''

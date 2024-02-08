@@ -93,12 +93,6 @@ def submit():
             
     return redirect(url_for('home'))
 
-### mod to fix last move of game and add line along 3 marks
-### When X and place 3 marks, there shoul not be a pc response because game is already over
-### When O is player, review logic and/or conditions for marks and add line
-### Add lag for pc move so it is not that fast
-### Review logic for placing marks
-### Add music when over and display winner
 
 @app.route('/player-move', methods=['POST'])
 def player_move():
@@ -106,15 +100,12 @@ def player_move():
     cell_id = data.get('cell_id')
     pc_cell = None
     row, col = board_map(cell_id)
-    game.mark(row, col)
+    game.player_mark(row, col)
     game.board[row][col] = game.player
-    print(game.board)
     if game.end_game() is False:
-        game.update()
-        print(game.board)
+        game.pc_mark()
         move = game.last_move                    
         pc_cell = grid_map(move)
-
     return jsonify(board=game.board,cell_id=cell_id,selected_mark=session['selected_mark'],pc_cell=pc_cell,pc_mark=session['pc_mark'])
 
 if __name__ == '__main__':
