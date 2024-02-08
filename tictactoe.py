@@ -12,7 +12,7 @@ class TicTacToe(object):
         self.values[2][0] += 2
         self.values[2][2] += 2
         self.last_move = ()
-
+        
     def reset(self):
         '''Reset the game to the initial state'''
         self.board = [['']*3 for _ in range(3)]
@@ -110,7 +110,7 @@ class TicTacToe(object):
                         if value is not None and value > max_value:
                             max_value = value
                             max_pos = (i, j)
-                            
+
             # mark the position
             self.board[max_pos[0]][max_pos[1]] = self.player
             self.values[max_pos[0]][max_pos[1]] = None
