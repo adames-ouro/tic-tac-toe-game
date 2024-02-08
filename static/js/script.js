@@ -14,7 +14,6 @@ document.addEventListener('DOMContentLoaded', function() {
         sessionStorage.setItem(formVisibilityFlag, 'hidden');
     });
 
-
     resetButton.addEventListener('click', function() {
 
         const cells = document.querySelectorAll('.cell');
@@ -22,6 +21,7 @@ document.addEventListener('DOMContentLoaded', function() {
             cell.innerHTML = ''; // Clear the cell content
             // If you're using classes to indicate a mark (e.g., 'x-mark' or 'o-mark'), remove those classes
             cell.classList.remove('x-mark', 'o-mark');
+            cell.style.backgroundColor = '#E3E3E3';
         });
 
         document.getElementById('settings-form').style.display = 'block';
@@ -41,6 +41,7 @@ document.addEventListener('DOMContentLoaded', function() {
 
             
             window.location.reload();
+            
         })
         .catch((error) => {
             console.error('Error:', error);
