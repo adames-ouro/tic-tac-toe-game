@@ -39,10 +39,9 @@ class TicTacToe(object):
             self.memory[(row,col)] =  self.player
             self.last_move = (row,col)
 
-
     def pc_mark(self):
         '''
-        Put an X or O mark on the board at position (row,col) 
+        Put an X or O mark on the board at position (row,col) using Minimax algo
         '''
         if self.end_game() is False:
             if self.player == 'X':
@@ -50,15 +49,15 @@ class TicTacToe(object):
             elif self.player == 'O':
                 self.pc = 'X'
 
-            best_score = -1
+            best_score = -float('inf')
             best_move = None
 
             for i in range(3):
                 for j in range(3):
                     if self.board[i][j] == '':
                         self.board[i][j] = self.pc
-                        score = self.evaluate_move(i, j, self.pc)
-                        self.board[i][j] = ''
+                        score = self.minimax(0, False)  # Start with depth 0, minimizing
+                        self.board[i][j] = ''  # Undo the move
                         if score > best_score:
                             best_score = score
                             best_move = (i, j)
@@ -77,44 +76,59 @@ class TicTacToe(object):
                             self.memory[(i,j)] =  self.pc
                             self.last_move = (i,j)
                             return
+   
+    def minimax(self, depth, isMaximizing):
+        if self.check_win(self.pc):
+            return 1
+        elif self.check_win(self.player):
+            return -1
+        elif self.is_board_full():
+            return 0
 
-    def evaluate_move(self, row, col, mark):
-        '''Eval move'''
-        score = 0
-        if self.check_potential_win(row, col, mark):
-            score += 1
-        return score
+        if isMaximizing:
+            bestScore = -float('inf')
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == '':
+                        self.board[i][j] = self.pc
+                        score = self.minimax(depth + 1, False)
+                        self.board[i][j] = ''
+                        bestScore = max(score, bestScore)
+            return bestScore
+        else:
+            bestScore = float('inf')
+            for i in range(3):
+                for j in range(3):
+                    if self.board[i][j] == '':
+                        self.board[i][j] = self.player
+                        score = self.minimax(depth + 1, True)
+                        self.board[i][j] = ''
+                        bestScore = min(score, bestScore)
+            return bestScore
 
-    def check_potential_win(self, row, col, mark):
-        '''check if move adds to a win'''
-        # Check row
-        if all(self.board[row][c] == mark or c == col for c in range(3)):
+    def check_win(self, mark):
+        # Check rows, columns, and diagonals for a win
+        for row in self.board:
+            if all(s == mark for s in row):
+                return True
+        for col in range(3):
+            if all(self.board[row][col] == mark for row in range(3)):
+                return True
+        if all(self.board[i][i] == mark for i in range(3)) or all(self.board[i][2-i] == mark for i in range(3)):
             return True
-        # Check column
-        if all(self.board[r][col] == mark or r == row for r in range(3)):
-            return True
-        # Check diagonal (if applicable)
-        if row == col and all(self.board[i][i] == mark or i == row for i in range(3)):
-            return True
-        if row + col == 2 and all(self.board[i][2-i] == mark or i == row for i in range(3)):
-            return True
-        return False                
-    
+        return False
+
+    def is_board_full(self):
+        return all(all(cell != '' for cell in row) for row in self.board)
+
     def end_game(self):
-        '''Return the True if game ended'''
-        board = self.board
+        '''Return True if the game has ended due to a win or a draw.'''
+        # Check for a win for both 'X' and 'O'
         for mark in 'XO':
-            # check rows
-            for row in board:
-                if all(slot == mark for slot in row):
-                    return True
-            # check columns
-            for col in range(len(board[0])):
-                if all(row[col] == mark for row in board):
-                    return True
-            # check diagonals
-            if all(board[i][i] == mark for i in range(len(board))):
+            if self.check_win(mark):
                 return True
-            if all(board[i][len(board)-i-1] == mark for i in range(len(board))):
-                return True
+        # Use the existing method to check if the board is full
+        if self.is_board_full():
+            return True
+        # If there's no win and the board is not full, the game hasn't ended
         return False
