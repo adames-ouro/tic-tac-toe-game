@@ -111,6 +111,5 @@ def player_move():
                 
         return jsonify(board=game.board,cell_id=cell_id,selected_mark=session['selected_mark'],pc_cell=pc_cell,pc_mark=session['pc_mark'])
 
-
 if __name__ == '__main__':
     app.run(port=6000)
