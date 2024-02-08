@@ -84,7 +84,6 @@ def submit():
             
     return redirect(url_for('home'))
             
-
 ### mod to fix last move of game and add line along 3 marks
 ### When X and place 3 marks, there shoul not be a pc response because game is already over
 ### When O is player, review logic and/or conditions for marks and add line
@@ -97,19 +96,20 @@ def player_move():
     data = request.get_json()
     cell_id = data.get('cell_id')
     pc_cell = None
+    if game.end_game() is False:
+        if (cell_id is not None):
+            row, col = board_map(cell_id)
+            game.mark(row, col)
+            game.board[row][col] = session['selected_mark']
 
-    if (cell_id is not None):
-        row, col = board_map(cell_id)
-        game.mark(row, col)
-        game.board[row][col] = selected_mark
-    
-        # pc move
-        if game.end_game() is False:
-            game.update()
-            move = game.last_move                
-            pc_cell = grid_map(move)
+            if game.end_game() is False:
+                game.player = session['pc_mark']
+                game.update()
+                print(game.board)
+                move = game.last_move                
+                pc_cell = grid_map(move)
                 
-        return jsonify(board=game.board,cell_id=cell_id,selected_mark=session['selected_mark'],pc_cell=pc_cell,pc_mark=session['pc_mark'])
+    return jsonify(board=game.board,cell_id=cell_id,selected_mark=session['selected_mark'],pc_cell=pc_cell,pc_mark=session['pc_mark'])
 
 if __name__ == '__main__':
-    app.run(port=6000)
+    app.run(port=8000)

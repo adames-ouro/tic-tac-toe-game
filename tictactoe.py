@@ -12,7 +12,7 @@ class TicTacToe(object):
         self.values[2][0] += 2
         self.values[2][2] += 2
         self.last_move = ()
-        
+
     def reset(self):
         '''Reset the game to the initial state'''
         self.board = [['']*3 for _ in range(3)]
@@ -35,10 +35,6 @@ class TicTacToe(object):
             if self.board[row][col] != '':
                 raise ValueError('Board position occupied') # show error on web
             
-            # if the game is already over
-            if self.end_game() is not False:
-                raise ValueError('Game is already complete') # show on web
-
             # mark the position
             self.board[row][col] = self.player
             self.values[row][col] = None
@@ -62,25 +58,36 @@ class TicTacToe(object):
             # Check diagonals for potential wins
             diag1 = [self.board[i][i] for i in range(3)]
             diag2 = [self.board[i][2-i] for i in range(3)]
-            max_pos = ()
-
+            
             if diag1.count(pc) == 2:
-                max_pos = (diag1.index(''), diag1.index(''))
-
+                try:
+                    max_pos = (diag1.index(''), diag1.index(''))
+                except:
+                    max_pos = ()
+                
             elif diag2.count(pc) == 2:
-                max_pos = (diag2.index(''), 2-diag2.index(''))
+                try:
+                    max_pos = (diag2.index(''), 2-diag2.index(''))
+                except:
+                    max_pos = ()
 
             else:
                 # Check rows and columns for potential wins
                 for i in range(3):
                     # Check rows
                     if self.board[i].count(pc) == 2:
-                        max_pos = (i, self.board[i].index(''))
+                        try:
+                            max_pos = (i, self.board[i].index(''))
+                        except:
+                            max_pos = ()
                     
                     # Check columns
                     col = [self.board[0][i], self.board[1][i], self.board[2][i]]
                     if col.count(pc) == 2:
-                        max_pos = (col.index(''), i)
+                        try:
+                            max_pos = (col.index(''), i)
+                        except:
+                            max_pos = ()
 
             if max_pos == ():
                 # No immediate threats, go greedy
@@ -125,38 +132,36 @@ class TicTacToe(object):
             self.last_move = (max_pos[0],max_pos[1])
 
 
-    def _is_win(self):
+    def _is_win(self,mark):
         '''Check if the board configuration is a win for the given player'''
         board = self.board
-        return ('X' == board[0][0] == board[0][1] == board[0][2] or # row 0
-                'X' == board[1][0] == board[1][1] == board[1][2] or # row 1
-                'X' == board[2][0] == board[2][1] == board[2][2] or # row 2
-                'X' == board[0][0] == board[1][0] == board[2][0] or # column 0
-                'X' == board[0][1] == board[1][1] == board[2][1] or # column 1
-                'X' == board[0][2] == board[1][2] == board[2][2] or # column 2
-                'X' == board[0][0] == board[1][1] == board[2][2] or # diagonals
-                'X' == board[0][2] == board[1][1] == board[2][0] or # other mark
-                'O' == board[0][0] == board[0][1] == board[0][2] or # row 0
-                'O' == board[1][0] == board[1][1] == board[1][2] or # row 1
-                'O' == board[2][0] == board[2][1] == board[2][2] or # row 2
-                'O' == board[0][0] == board[1][0] == board[2][0] or # column 0
-                'O' == board[0][1] == board[1][1] == board[2][1] or # column 1
-                'O' == board[0][2] == board[1][2] == board[2][2] or # column 2
-                'O' == board[0][0] == board[1][1] == board[2][2] or # diagonals
-                'O' == board[0][2] == board[1][1] == board[2][0])
+        # check rows
+        for row in board:
+            if all(slot == mark for slot in row):
+                return True
+        # check columns
+        for col in range(len(board[0])):
+            if all(row[col] == mark for row in board):
+                return True
+        # check diagonals
+        if all(board[i][i] == mark for i in range(len(board))):
+            return True
+        if all(board[i][len(board)-i-1] == mark for i in range(len(board))):
+            return True
+        return False
     
     def end_game(self):
         '''Return the True if game ended'''
-        if self._is_win():
-            return True
-
+        for mark in 'XO':
+            status = self._is_win(mark)
+        
         empty_cells = 0
         for i in range(3):
             for j in range(3):
                 if self.board[i][j] == '':
                     empty_cells = empty_cells + 1
 
-        if (empty_cells == 0):
+        if (empty_cells == 0) or (status == True):
             return True # tie
         
         else:
