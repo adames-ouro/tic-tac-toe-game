@@ -51,39 +51,48 @@ def grid_map(cell_id):
 @app.route('/home', methods=['GET','POST'])
 def home():
     selected_mark = session.get('selected_mark', None)
-    pc_mark = session.get('selected_mark', None)
+    pc_mark = session.get('pc_mark', None)
     cell_id = session.get('cell_id',None)
-    return render_template('index.html',board=game.board, cell_id=cell_id, selected_mark=selected_mark,pc_mark=pc_mark)
-
+    game.player = selected_mark
+    game.pc = pc_mark
+    return render_template('index.html',
+                           board=game.board,
+                           cell_id=cell_id,
+                           selected_mark=selected_mark,
+                           pc_mark=pc_mark)
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
-    game.reset()
     session.pop('selected_mark', None)
     session.pop('pc_mark', None)
     session.pop('cell_id', None)
+    game.reset()
+    game.player = ''
+    game.pc = ''
     return redirect(url_for('home'))
-
 
 @app.route('/submit', methods=['POST'])
 def submit():
     player1_mark = request.form.get('player1')
 
     if player1_mark:
-        session['selected_mark'] = player1_mark
-
-        if session['selected_mark'] == 'X':
-            session['pc_mark'] = 'O'
-
-        elif session['selected_mark'] == 'O':
-            session['pc_mark'] = 'X'
-
+        if player1_mark == 'X':
+            game.player = 'X'
+            session['selected_mark'] = game.player
+            game.pc = 'O'
+            session['pc_mark'] = game.pc
+            
+        elif player1_mark == 'O':
+            game.player = 'O'
+            session['selected_mark'] = game.player
+            game.pc = 'X'
+            session['pc_mark'] = game.pc
             corners = [(0,0),(0,2),(2,0),(2,2)]
             random_choice = random.choice(corners)
-            game.board[random_choice[0]][random_choice[1]] = session['pc_mark']
+            game.board[random_choice[0]][random_choice[1]] = game.pc
             
     return redirect(url_for('home'))
-            
+
 ### mod to fix last move of game and add line along 3 marks
 ### When X and place 3 marks, there shoul not be a pc response because game is already over
 ### When O is player, review logic and/or conditions for marks and add line
@@ -96,19 +105,16 @@ def player_move():
     data = request.get_json()
     cell_id = data.get('cell_id')
     pc_cell = None
+    row, col = board_map(cell_id)
+    game.mark(row, col)
+    game.board[row][col] = game.player
+    print(game.board)
     if game.end_game() is False:
-        if (cell_id is not None):
-            row, col = board_map(cell_id)
-            game.mark(row, col)
-            game.board[row][col] = session['selected_mark']
+        game.update()
+        print(game.board)
+        move = game.last_move                    
+        pc_cell = grid_map(move)
 
-            if game.end_game() is False:
-                game.player = session['pc_mark']
-                game.update()
-                print(game.board)
-                move = game.last_move                
-                pc_cell = grid_map(move)
-                
     return jsonify(board=game.board,cell_id=cell_id,selected_mark=session['selected_mark'],pc_cell=pc_cell,pc_mark=session['pc_mark'])
 
 if __name__ == '__main__':

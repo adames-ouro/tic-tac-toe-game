@@ -80,8 +80,14 @@ document.addEventListener('DOMContentLoaded', function() {
                     if (pcCell) {
                         pcCell.innerHTML = pcSelectedMark;
                         if (pcSelectedMark === 'X') {
+                            setTimeout(() => {
+                                console.log('2 seconds later');
+                              }, 2000); // 2000 milliseconds = 2 seconds
                             pcCell.classList.add('x-mark');
                         } else if (pcSelectedMark === 'O') {
+                            setTimeout(() => {
+                                console.log('2 seconds later');
+                              }, 2000); // 2000 milliseconds = 2 seconds
                             pcCell.classList.add('o-mark');
                         }
                     }
