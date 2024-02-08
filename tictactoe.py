@@ -58,19 +58,19 @@ class TicTacToe(object):
             # Check diagonals for potential wins
             diag1 = [self.board[i][i] for i in range(3)]
             diag2 = [self.board[i][2-i] for i in range(3)]
+            max_pos = ()
             
             if diag1.count(pc) == 2:
                 try:
                     max_pos = (diag1.index(''), diag1.index(''))
                 except:
-                    max_pos = ()
+                    pass
                 
             elif diag2.count(pc) == 2:
                 try:
                     max_pos = (diag2.index(''), 2-diag2.index(''))
                 except:
-                    max_pos = ()
-
+                    pass
             else:
                 # Check rows and columns for potential wins
                 for i in range(3):
@@ -79,7 +79,7 @@ class TicTacToe(object):
                         try:
                             max_pos = (i, self.board[i].index(''))
                         except:
-                            max_pos = ()
+                            pass
                     
                     # Check columns
                     col = [self.board[0][i], self.board[1][i], self.board[2][i]]
@@ -87,36 +87,36 @@ class TicTacToe(object):
                         try:
                             max_pos = (col.index(''), i)
                         except:
-                            max_pos = ()
+                            pass
 
-            if max_pos == ():
-                # No immediate threats, go greedy
-                rows, cols = set(), set()
+                    if max_pos == ():
+                        ### go greedy
+                        rows, cols = set(), set()
 
-                for coord in self.memory.keys():
-                    rows.add(coord[0])
-                    cols.add(coord[1])
+                        for coord in self.memory.keys():
+                            rows.add(coord[0])
+                            cols.add(coord[1])
 
-                # update values for grids with goal of horz line
-                for _rows in rows:
-                    for _elements in range(len(self.values)):
-                        if self.values[_rows][_elements] is not None:
-                            self.values[_rows][_elements] += 2
+                        # update values for grids with goal of horz line
+                        for _rows in rows:
+                            for _elements in range(len(self.values)):
+                                if self.values[_rows][_elements] is not None:
+                                    self.values[_rows][_elements] += 2
 
-                # update values for grids with goal of vert line
-                for _cols in cols:
-                    for _elements in range(len(self.values)):
-                        if self.values[_elements][_cols] is not None:
-                            self.values[_elements][_cols] += 2
+                        # update values for grids with goal of vert line
+                        for _cols in cols:
+                            for _elements in range(len(self.values)):
+                                if self.values[_elements][_cols] is not None:
+                                    self.values[_elements][_cols] += 2
 
-                # Assuming 'game.values' is your list of lists
-                max_value = -1
+                        # Assuming 'game.values' is your list of lists
+                        max_value = -1
 
-                for i, row in enumerate(self.values):
-                    for j, value in enumerate(row):
-                        if value is not None and value > max_value:
-                            max_value = value
-                            max_pos = (i, j)
+                        for i, row in enumerate(self.values):
+                            for j, value in enumerate(row):
+                                if value is not None and value > max_value:
+                                    max_value = value
+                                    max_pos = (i, j)
 
             # mark the position
             self.board[max_pos[0]][max_pos[1]] = self.player
