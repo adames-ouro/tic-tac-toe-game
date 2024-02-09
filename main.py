@@ -8,6 +8,7 @@ game = TicTacToe()
 selected_mark = None
 
 def board_map(cell_id):
+    '''Maps html cell with TicTacToe board attribute.'''
     if cell_id == "cell-0":
         return (0,0)
     elif cell_id == "cell-1":
@@ -28,6 +29,7 @@ def board_map(cell_id):
         return (2,2)
 
 def grid_map(cell_id):
+    '''Maps TicTacToe board attribute with html cell.'''
     if cell_id == (0,0):
         return "cell-0"
     elif cell_id == (0,1):
@@ -50,6 +52,7 @@ def grid_map(cell_id):
 @app.route('/')
 @app.route('/home', methods=['GET','POST'])
 def home():
+    '''Home page'''
     selected_mark = session.get('selected_mark', None)
     pc_mark = session.get('pc_mark', None)
     cell_id = session.get('cell_id',None)
@@ -63,6 +66,7 @@ def home():
 
 @app.route('/reset', methods=['POST'])
 def reset_game():
+    '''Reset button'''
     session.pop('selected_mark', None)
     session.pop('pc_mark', None)
     session.pop('cell_id', None)
@@ -73,6 +77,7 @@ def reset_game():
 
 @app.route('/submit', methods=['POST'])
 def submit():
+    '''Player mark selection'''
     player1_mark = request.form.get('player1')
 
     if player1_mark:
@@ -95,6 +100,7 @@ def submit():
 
 @app.route('/player-move', methods=['POST'])
 def player_move():
+    '''Given user click, makes AI response'''
     data = request.get_json()
     cell_id = data.get('cell_id')
     pc_cell = None
