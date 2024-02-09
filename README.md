@@ -38,7 +38,7 @@ This Tic Tac Toe game is a web application built with Flask, allowing players to
 
 The Tic Tac Toe AI opponent runs thanks to the Minimax algorithm to determine the best move optimally.
 
-The Minimax algorithm works by exploring all possible moves in the game, predicting the opponent's responses to those moves, and choosing the move that maximizes the player's chance of winning while minimizing the AI's chance. Here's a simplified explanation of the algorithm:
+The Minimax algorithm works by exploring all possible moves in the game and choosing the move that maximizes the player's chance of winning while minimizing the AI's chance. Here's a simplified explanation of the algorithm:
 
 1. **Base Case**: The recursion ends when the function encounters a terminal state:
    - If the AI (`self.pc`) wins, return `1`.
