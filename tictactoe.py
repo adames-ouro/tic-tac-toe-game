@@ -30,7 +30,6 @@ class TicTacToe(object):
         if self.end_game() is False:
             # mark the position
             self.board[row][col] = self.player
-            self.values[row][col] = None
             self.memory[(row,col)] =  self.player
             self.last_move = (row,col)
 
@@ -59,7 +58,6 @@ class TicTacToe(object):
 
             if best_move:
                 self.board[best_move[0]][best_move[1]] = self.pc
-                self.values[best_move[0]][best_move[1]] = None
                 self.memory[(best_move[0],best_move[1])] =  self.pc
                 self.last_move = (best_move[0],best_move[1])
             else:
@@ -67,7 +65,6 @@ class TicTacToe(object):
                     for j in range(3):
                         if self.board[i][j] == '':
                             self.board[i][j] = self.pc
-                            self.values[i][j] = None
                             self.memory[(i,j)] =  self.pc
                             self.last_move = (i,j)
                             return
