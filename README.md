@@ -1,15 +1,8 @@
 # Tic Tac Toe Game
 
-<<<<<<< HEAD
-
 ![Game Image](static/img/game.png)
 
 This Tic Tac Toe game is a web application built with Flask, allowing players to play against a computer opponent. It uses HTML, CSS, and JavaScript for the frontend, with Flask serving the backend logic. The game features a simple, user-friendly interface and provides an engaging Tic Tac Toe experience.
-=======
-![Game Image](static/img/game.png)
-
-This Tic Tac Toe game is a web application built with Flask, allowing players to play against an AI opponent. It uses HTML, CSS, and JavaScript for the frontend, with Flask serving the backend logic.
->>>>>>> 327bfc6 (	modified:   README.md)
 
 ## Features
 
