@@ -4,7 +4,6 @@ class TicTacToe(object):
         '''Start a new game'''
         self.board = [ ['']*3 for _ in range(3)] # 3x3 matrix
         self.player = '' # Player parameter
-        self.memory = {}
         self.last_move = ()
         self.pc = ''
 
@@ -12,7 +11,6 @@ class TicTacToe(object):
         '''Reset the game to the initial state'''
         self.board = [['']*3 for _ in range(3)]
         self.player = ''
-        self.memory = {}
         self.last_move = ()
         self.pc = ''
 
@@ -30,7 +28,6 @@ class TicTacToe(object):
         if self.end_game() is False:
             # mark the position
             self.board[row][col] = self.player
-            self.memory[(row,col)] =  self.player
             self.last_move = (row,col)
 
     def pc_mark(self):
@@ -58,14 +55,12 @@ class TicTacToe(object):
 
             if best_move:
                 self.board[best_move[0]][best_move[1]] = self.pc
-                self.memory[(best_move[0],best_move[1])] =  self.pc
                 self.last_move = (best_move[0],best_move[1])
             else:
                 for i in range(3):
                     for j in range(3):
                         if self.board[i][j] == '':
                             self.board[i][j] = self.pc
-                            self.memory[(i,j)] =  self.pc
                             self.last_move = (i,j)
                             return
    
