@@ -5,11 +5,6 @@ class TicTacToe(object):
         self.board = [ ['']*3 for _ in range(3)] # 3x3 matrix
         self.player = '' # Player parameter
         self.memory = {}
-        self.values = [ [0]*3 for _ in range(3)] # 3x3 matrix
-        self.values[0][0] += 2
-        self.values[0][2] += 2
-        self.values[2][0] += 2
-        self.values[2][2] += 2
         self.last_move = ()
         self.pc = ''
 
@@ -18,11 +13,6 @@ class TicTacToe(object):
         self.board = [['']*3 for _ in range(3)]
         self.player = ''
         self.memory = {}
-        self.values = [ [0]*3 for _ in range(3)] # 3x3 matrix
-        self.values[0][0] += 2
-        self.values[0][2] += 2
-        self.values[2][0] += 2
-        self.values[2][2] += 2
         self.last_move = ()
         self.pc = ''
 
