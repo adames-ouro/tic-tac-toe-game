@@ -1,6 +1,5 @@
 class TicTacToe(object):
     '''Management of a Tic-Tac-Toe game'''
-
     def __init__(self):
         '''Start a new game'''
         self.board = [ ['']*3 for _ in range(3)] # 3x3 matrix
