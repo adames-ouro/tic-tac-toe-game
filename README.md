@@ -49,6 +49,7 @@ The Minimax algorithm works by exploring all possible moves in the game and choo
    - If it's the AI's turn (maximizing player), it tries to maximize the score.
    - If it's the player's turn (minimizing player), it tries to minimize the score.
 
+![Game Tree](static/img/game-tree.png)
 
 ## Installation
 
